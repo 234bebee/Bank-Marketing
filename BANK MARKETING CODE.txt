@@ -1,0 +1,96 @@
+CREATE DATABASE `Bank Marketing`;
+USE `Bank Marketing`;
+/* csv file imported using table import wizard on MySQL Workbench. Table name is 'Bank' */
+/* ==============================QUESTIONS============================== */
+/* 1. Which professions are the most popular among customers over 45 years old? */
+SELECT Job, COUNT(Job) AS Magnitude
+FROM Bank
+WHERE Age > 45
+GROUP BY Job
+ORDER BY COUNT(Job) DESC
+;
++---------------+-----------+
+| Job           | Magnitude |
++---------------+-----------+
+| retired       |       764 |
+| management    |       757 |
+| blue-collar   |       537 |
+| technician    |       456 |
+| admin.        |       361 |
+| services      |       206 |
+| housemaid     |       157 |
+| entrepreneur  |       125 |
+| unemployed    |       118 |
+| self-employed |       113 |
+| unknown       |        37 |
+| student       |         2 |
++---------------+-----------+
+
+/* 2. For how many people with loans did the marketing campaign succeed? */
+SELECT COUNT(POutcome) AS SuccessfulOutcomes FROM Bank
+WHERE POutcome = 'success' AND Loan = 'yes';
++--------------------+
+| SuccessfulOutcomes |
++--------------------+
+|                 51 |
++--------------------+
+
+/* 3. What are the first 3 jobs of the people most likely to subscribe to a term deposit? */
+SELECT Job, COUNT(Job) AS Magnitude FROM Bank
+WHERE Deposit = 'yes'
+GROUP BY Job
+ORDER BY COUNT(Job) DESC
+LIMIT 3;
++-------------+-----------+
+| Job         | Magnitude |
++-------------+-----------+
+| management  |      1301 |
+| technician  |       840 |
+| blue-collar |       708 |
++-------------+-----------+
+
+/* 4. What is the number of people subscribing to term deposit per month? */
+SELECT DISTINCT Month, COUNT(Month) AS NumberOfSubscribers
+FROM Bank 
+WHERE Deposit = 'yes'
+GROUP BY Month
+ORDER BY Month
+;
++-------+---------------------+
+| Month | NumberOfSubscribers |
++-------+---------------------+
+| apr   |                 577 |
+| aug   |                 688 |
+| dec   |                 100 |
+| feb   |                 441 |
+| jan   |                 142 |
+| jul   |                 627 |
+| jun   |                 546 |
+| mar   |                 248 |
+| may   |                 925 |
+| nov   |                 403 |
+| oct   |                 323 |
+| sep   |                 269 |
++-------+---------------------+
+/* 5. What is the marital status of most of the customers? */
+SELECT DISTINCT Marital AS MaritalStatus
+FROM Bank 
+GROUP BY Marital
+ORDER BY COUNT(Marital) DESC
+LIMIT 1;
++---------------+
+| MaritalStatus |
++---------------+
+| married       |
++---------------+
+/* 6. By what means were most of the customers contacted? */
+SELECT DISTINCT Contact AS MeansOfContact
+FROM Bank
+GROUP BY Contact, Month
+ORDER BY Contact Desc
+LIMIT 1;
++----------------+
+| MeansOfContact |
++----------------+
+| unknown        |
++----------------+
